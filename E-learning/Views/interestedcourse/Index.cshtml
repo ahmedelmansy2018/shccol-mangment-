@@ -1,0 +1,56 @@
+﻿@model IEnumerable<E_learning.Models.Course>
+@using E_learning.Controllers
+<h3>
+    InterestedCourses
+</h3>
+<table class="table">
+    <tr>
+        <th>I like it</th>
+        <th>Coures Name</th>
+    </tr>
+   
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="col-md-2">
+                @if (!((interestedcourseController)this.ViewContext.Controller).IsChosen(item.Courseid))
+                {
+                    <input type="checkbox" name="ID" id="@item.Courseid " data-model-id="@item.Courseid"
+                           onclick="triggerlink(this)" />
+                }
+                else
+                {
+                    <input type="checkbox" name="ID" id="@item.Courseid " data-model-id="@item.Courseid"
+                           onclick="triggerlink(this)" checked />
+                }
+
+            </td>
+
+            <td>
+                @Html.DisplayFor(model => item.Tittel)
+            </td>
+        </tr>
+    }
+</table>
+<script>
+
+     
+    function triggerlink(obj) {
+        var status = false;
+
+        if (obj.checked) { status = true; }
+        var ele = $(obj);
+        var Id = ele.data("model-id");
+        var url = "/interestedcourse/AddRemoveinterestJson?courseid=" + Id + "&status=" + status;
+       $.ajax({
+            url: url,
+            type: "POST",
+            success: function () { },
+
+            error: function () { }
+        });
+    }
+
+
+        
+</script>

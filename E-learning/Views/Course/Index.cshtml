@@ -1,0 +1,163 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<E_learning.Models.Course>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<style>
+    .glyphicon-star {
+        color: gold;
+        text-shadow: 0 0 black, 0 0 black, 0 0 black, 0 0 black, 0 0 black;
+    }
+</style>
+<p>
+    @*@Html.ActionLink("Create New", "Create")*@
+    <a href="@Url.Action("PartialCreateNew", "course")" class="btn btn-success" data-toggle="modal" data-target="#EpicModal">
+        create New Course
+    </a>
+
+    <div class="modal fade" id="EpicModal" tabindex="-1" aria-labelledby="EpicModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+            </div>
+        </div>
+    </div>
+
+</p>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+
+    $(function () {
+
+        $('.table').DataTable();
+
+    });
+
+</script>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                tittle
+            </th>
+            <th>
+             Credits
+            </th>
+            <th>
+                Level Name
+            </th>
+            <th>
+               Price
+            </th>
+            <th>
+                Rating
+
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tittel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Credits)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CourseLevel.LevelName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+
+                    @for (int i = 0; i < (int?)item.Rating; i++)
+                    {
+                        <span id="ss" class="glyphicon glyphicon-star "> </span>
+
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Courseid }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Courseid }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Courseid })  |
+                    <a id="button" class="btn btn-danger" data-model-id="@item.Courseid" onclick="Delete(this)">Deleted</a>
+                    <script>
+
+                        function Delete(obj) {
+                            //swal({
+                            //    title: "Are you sure?",
+                            //    text: "Your will not be able to recover this imaginary file!",
+                            //    icon: "warning"
+                            //}).then((result) => {
+                            //    if (result) {
+
+                            //    }
+
+
+                            var ele = $(obj);
+                            var id = ele.data("model-id");
+                            var url = "/course/DeleteConfirmedJson/" + id;
+                            $.ajax({
+                                url: url,
+                                type: "post",
+                                success: function () {
+                                    ele.closest("tr").remove(); toastr.success('Deleted!');
+                                },
+                                error: function () { toastr.error('Failed!'); }
+
+                            });
+
+                        }
+
+                    </script>
+
+
+
+
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<div id="accordion">
+
+    @foreach (var course in Model)
+    {
+        <h3>@course.Tittel </h3>
+
+
+        <div>
+            @foreach (var item in course.Enrollments)
+            {
+                <div class="col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <img src="~/Content/Images/std/@Url.Content(item.Student.ImagePath)" style="width:200px;height:200px" alt="...">
+                        <div class="caption">
+                            <a href="/Student/Details/@Url.Content(item.studentid.ToString())">
+
+                                <h3 style="text-align:center"> @item.Student.FullName</h3>
+                            </a>
+
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<img src="@Url.Action("DrawChart")" alt="" />
+
+@Html.PagedListPager(Model, Page => Url.Action("Index", new { Page }))

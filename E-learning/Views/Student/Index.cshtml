@@ -1,0 +1,78 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+
+
+@model IPagedList<E_learning.Models.Student>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("ExPort To Excel", "ExporttoEdcel", new { id = "exceldownload" })
+
+</p>
+<table class="table">
+    <tr>
+        <th>
+            First Name
+        </th>
+        <th>
+            Last Name
+        </th>
+        <th>
+            Enrollment Data
+        </th>
+        <th>
+            Image
+
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LName)
+            </td>
+            <td>
+                @if (!string.IsNullOrWhiteSpace(item.EnrollmentData.ToString()))
+                {
+                    @Convert.ToDateTime(item.EnrollmentData).ToString("dd/MMMM/yyy")
+                }
+            </td>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.ImagePath)*@
+
+                @*<img width="70" height="60" src="~/Content/Images/std/@item.ImagePath" alt="" />*@
+                @Html.Image("~/Content/Images/std/" + @item.ImagePath, "", "100", "100")
+
+            </td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Studentid }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Studentid }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Studentid })
+            </td>
+        </tr>
+    }
+
+</table>
+@Html.PagedListPager(Model, Page => Url.Action("Index", new { Page }))
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script>
+    $("#exceldownload").click(function () {
+        var x = '@TempData["ExcelDownload"]';
+        if (x != '') {
+            toastr.success(a,"School Mangment System");
+        }
+    });
+</script>

@@ -1,0 +1,12 @@
+﻿@model IList<E_learning.Models.Course>
+    <br />
+@{ 
+    var MyChart = new Chart(width: 800, height: 600, theme: ChartTheme.Blue)
+        .AddTitle("Credits Per Coures")
+        .AddSeries(
+        name:"Courses",
+        chartType:"Column",
+        xValue:Model,xField: "Tittel",
+        yValues: Model, yFields: "Credits"
+        ).Write();
+}

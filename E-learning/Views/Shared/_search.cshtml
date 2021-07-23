@@ -1,0 +1,52 @@
+﻿
+@using (Html.BeginForm("index", "course"))
+{
+
+    <input id="Searchinput" class="form-inline my-2 my-lg-0" name="Search" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success  my-2 my-sm-0" type="submit">Search</button>
+}
+
+<style>
+    #Searchinput {
+        position: relative;
+        z-index: 10000;
+    }
+
+    .ui-autocomplete {
+        z-index: 9999 !important;
+    }
+</style>
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<script type="text/javascript">
+    @*$(function () {
+
+        $("#Searchinput").autocomplete({
+            minLength: 1,
+            source: function (request, response) {
+
+                $.ajax({
+                    url:@Url.Action("GetValSearch", "Course"),
+                    type: "POST",
+                    dataType: "json",
+                    data: { search: $("#Searchinput").val() },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Title, value: item.Title };
+                        }))
+                    }
+
+
+                })
+
+
+            },
+            messages: {
+                noResults:"",results:""
+            }
+
+        });
+
+    });*@
+</script>
+

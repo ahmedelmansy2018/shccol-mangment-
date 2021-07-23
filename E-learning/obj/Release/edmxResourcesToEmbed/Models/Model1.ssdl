@@ -1,0 +1,251 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="SchoolModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AspNetUserRoles">
+    <Key>
+      <PropertyRef Name="UserId" />
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AspNetUsers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="256" />
+    <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+    <Property Name="PasswordHash" Type="nvarchar(max)" />
+    <Property Name="SecurityStamp" Type="nvarchar(max)" />
+    <Property Name="PhoneNumber" Type="nvarchar(max)" />
+    <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+    <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+    <Property Name="LockoutEndDateUtc" Type="datetime" />
+    <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+    <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Course">
+    <Key>
+      <PropertyRef Name="Courseid" />
+    </Key>
+    <Property Name="Courseid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Tittel" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Credits" Type="int" Nullable="false" />
+    <Property Name="CourseDescription" Type="nvarchar(max)" />
+    <Property Name="Price" Type="money" />
+    <Property Name="level" Type="tinyint" />
+    <Property Name="IsCourseActive" Type="bit" />
+    <Property Name="Rating" Type="tinyint" />
+    <Property Name="CourseLevelid" Type="int" />
+    <Property Name="Departmentid" Type="int" />
+  </EntityType>
+  <EntityType Name="CourseLevel">
+    <Key>
+      <PropertyRef Name="CourseLevelid" />
+    </Key>
+    <Property Name="CourseLevelid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LevelName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="Departmentid" />
+    </Key>
+    <Property Name="Departmentid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DeptName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Enrollment">
+    <Key>
+      <PropertyRef Name="Enrollmentid" />
+    </Key>
+    <Property Name="Enrollmentid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Courseid" Type="int" Nullable="false" />
+    <Property Name="studentid" Type="int" Nullable="false" />
+    <Property Name="Grade" Type="decimal" Precision="4" Scale="1" />
+  </EntityType>
+  <EntityType Name="Student">
+    <Key>
+      <PropertyRef Name="Studentid" />
+    </Key>
+    <Property Name="Studentid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="LName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="EnrollmentData" Type="date" />
+    <Property Name="ImagePath" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="TrainerIintrestedCourse">
+    <Key>
+      <PropertyRef Name="TrainerIntCoureseid" />
+    </Key>
+    <Property Name="TrainerIntCoureseid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Trainnerid" Type="int" />
+    <Property Name="Courseid" Type="int" />
+  </EntityType>
+  <EntityType Name="Trainner">
+    <Key>
+      <PropertyRef Name="Trainnerid" />
+    </Key>
+    <Property Name="Trainnerid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="LName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Departmentid" Type="int" />
+    <Property Name="AspNerUserId" Type="nvarchar" MaxLength="128" />
+  </EntityType>
+  <Association Name="FK_Course_CourseLevel">
+    <End Role="CourseLevel" Type="Self.CourseLevel" Multiplicity="0..1" />
+    <End Role="Course" Type="Self.Course" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CourseLevel">
+        <PropertyRef Name="CourseLevelid" />
+      </Principal>
+      <Dependent Role="Course">
+        <PropertyRef Name="CourseLevelid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Course_Department">
+    <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+    <End Role="Course" Type="Self.Course" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="Departmentid" />
+      </Principal>
+      <Dependent Role="Course">
+        <PropertyRef Name="Departmentid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="AspNetUserRoles">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Enrollment_Course">
+    <End Role="Course" Type="Self.Course" Multiplicity="1" />
+    <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Course">
+        <PropertyRef Name="Courseid" />
+      </Principal>
+      <Dependent Role="Enrollment">
+        <PropertyRef Name="Courseid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Enrollment_Student">
+    <End Role="Student" Type="Self.Student" Multiplicity="1" />
+    <End Role="Enrollment" Type="Self.Enrollment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
+        <PropertyRef Name="Studentid" />
+      </Principal>
+      <Dependent Role="Enrollment">
+        <PropertyRef Name="studentid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TrainerIintrestedCourse_Course">
+    <End Role="Course" Type="Self.Course" Multiplicity="0..1" />
+    <End Role="TrainerIintrestedCourse" Type="Self.TrainerIintrestedCourse" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Course">
+        <PropertyRef Name="Courseid" />
+      </Principal>
+      <Dependent Role="TrainerIintrestedCourse">
+        <PropertyRef Name="Courseid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TrainerIintrestedCourse_Trainner">
+    <End Role="Trainner" Type="Self.Trainner" Multiplicity="0..1" />
+    <End Role="TrainerIintrestedCourse" Type="Self.TrainerIintrestedCourse" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Trainner">
+        <PropertyRef Name="Trainnerid" />
+      </Principal>
+      <Dependent Role="TrainerIintrestedCourse">
+        <PropertyRef Name="Trainnerid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Trainner_AspNetUsers">
+    <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="0..1" />
+    <End Role="Trainner" Type="Self.Trainner" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AspNetUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Trainner">
+        <PropertyRef Name="AspNerUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Trainner_Department">
+    <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+    <End Role="Trainner" Type="Self.Trainner" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="Departmentid" />
+      </Principal>
+      <Dependent Role="Trainner">
+        <PropertyRef Name="Departmentid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="SchoolModelStoreContainer">
+    <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Course" EntityType="Self.Course" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CourseLevel" EntityType="Self.CourseLevel" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Enrollment" EntityType="Self.Enrollment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TrainerIintrestedCourse" EntityType="Self.TrainerIintrestedCourse" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Trainner" EntityType="Self.Trainner" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Course_CourseLevel" Association="Self.FK_Course_CourseLevel">
+      <End Role="CourseLevel" EntitySet="CourseLevel" />
+      <End Role="Course" EntitySet="Course" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Course_Department" Association="Self.FK_Course_Department">
+      <End Role="Department" EntitySet="Department" />
+      <End Role="Course" EntitySet="Course" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Enrollment_Course" Association="Self.FK_Enrollment_Course">
+      <End Role="Course" EntitySet="Course" />
+      <End Role="Enrollment" EntitySet="Enrollment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Enrollment_Student" Association="Self.FK_Enrollment_Student">
+      <End Role="Student" EntitySet="Student" />
+      <End Role="Enrollment" EntitySet="Enrollment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TrainerIintrestedCourse_Course" Association="Self.FK_TrainerIintrestedCourse_Course">
+      <End Role="Course" EntitySet="Course" />
+      <End Role="TrainerIintrestedCourse" EntitySet="TrainerIintrestedCourse" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TrainerIintrestedCourse_Trainner" Association="Self.FK_TrainerIintrestedCourse_Trainner">
+      <End Role="Trainner" EntitySet="Trainner" />
+      <End Role="TrainerIintrestedCourse" EntitySet="TrainerIintrestedCourse" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Trainner_AspNetUsers" Association="Self.FK_Trainner_AspNetUsers">
+      <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+      <End Role="Trainner" EntitySet="Trainner" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Trainner_Department" Association="Self.FK_Trainner_Department">
+      <End Role="Department" EntitySet="Department" />
+      <End Role="Trainner" EntitySet="Trainner" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

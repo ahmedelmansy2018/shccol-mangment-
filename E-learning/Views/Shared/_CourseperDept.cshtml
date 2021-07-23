@@ -1,0 +1,13 @@
+﻿@model E_learning.Models.Course
+
+<div class=" panel panel-success">
+    <div class=" panel-heading">@Model.Tittel - @Model.Credits Hour(s) </div>
+    
+    <p>
+        @Html.ActionLink("Edit", "Edit", "Course", new { id = Model.Courseid }, null) 
+
+
+    </p>
+</div>
+
+

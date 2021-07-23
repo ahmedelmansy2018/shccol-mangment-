@@ -1,0 +1,131 @@
+﻿@using E_learning.Models
+@{ 
+    var CourseStats = (List<CourseStats>)ViewBag.CourseStats;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css" rel="stylesheet">
+    <style>
+        .megasubmenu{ padding: 20px; }
+
+        @@media (min-width: 992px){
+          .dropdown-menu .dropdown-toggle:after{
+            border-top: .3em solid transparent;
+              border-right: 0;
+              border-bottom: .3em solid transparent;
+              border-left: .3em solid;
+          }
+          .dropdown-menu{
+            margin:0; 
+          }
+          .megasubmenu{ 
+            left:100%; top:0; min-height: 100%; min-width:500px;
+          }
+          .dropdown-menu > li:hover .megasubmenu{
+            display: block;
+          }
+        }
+            </style>
+
+</head>
+
+
+<body>
+    <div class="container body-content">
+
+        <div class="row">
+            <div class="col-md-2">
+                <br />
+
+                @if (CourseStats != null)
+                {
+                    foreach (var item in CourseStats)
+                    {
+                        @Html.Partial("_CourseEnrollSummary", item)
+
+                    }
+                }
+
+            </div>
+
+            <div class="col-md-10">
+                @Html.Partial("_Navbar")
+                
+
+                @RenderBody()
+                <hr />
+                <footer>
+                    <p>&copy; @DateTime.Now.Year App-School </p>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script>
+        $(function () {
+
+            $('input[type=datetime]').datepicker({
+
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-10:+10"
+
+
+            });
+        });
+        $(function () {
+            $("#accordion").accordion();
+        });
+        $(function () {
+            var tabs = $("#tabs").tabs();
+            tabs.find(".ui-tabs-nav").sortable({
+                axis: "x",
+                stop: function () {
+                    tabs.tabs("refresh");
+                }
+            });
+        });
+    </script>
+    <script>
+        // Prevent closing from click inside dropdown
+        $(document).on('click', '.dropdown-menu', function (e) {
+            e.stopPropagation();
+        });
+
+        // clickable on mobile view
+        if ($(window).width() < 992) {
+            $('.has-submenu a').click(function (e) {
+                e.preventDefault();
+                $(this).next('.megasubmenu').toggle();
+
+                $('.dropdown').on('hide.bs.dropdown', function () {
+                    $(this).find('.megasubmenu').hide();
+                })
+            });
+        }
+    </script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src=" https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+
+
+
+
+
+</body>
+</html>
